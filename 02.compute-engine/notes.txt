@@ -1,0 +1,45 @@
+GCP COMPUTE ENGINE
+ - Overview 
+ - 1. how to create virtual marchine
+ - 2. understand marchine types and images
+ - 3. installing http servers in the compute engine virtual marchine 
+ - 4. understanding internal and external ips
+ - 5. playing with static ip addresses
+ - 6. understanding static ip address in gcp 
+
+
+ - applications are deployed in servers 
+ - in the cloud, applications are deployed in virtual servers 
+ - this is where the compute engine come in. 
+ - these virtual marchines are rented. 
+ - virtual machines are virtual servers in GCP 
+ - compute engine provision and manage the virtual machines 
+ - compute engine helps you to create and manage lifecyle of Virtual Machine Instances. 
+ - can implement load balancing and auto scaling for multiple vm machines 
+ - allows to attach storage to vms 
+ - allows to manage network connectivity and configuration to vm instances 
+ - 
+
+ Compute Engine Machine Family 
+ 1. Hardware - has machine family and machine type 
+    different machines families are for different work loads 
+    a) General Purpose(E2, N2, N2D, N1) best price-performance ration 
+    are for web applications severs, small medium databse, dev environment
+    b) Memory Optimized(M2,M1) have ultra high memeory workloads.
+        best for in-memory databases and in-memory analytics 
+
+    c)Compute Optimized (C2): compute intensive workloads.
+     run gaming applications, 
+
+- variety of machine types are available for each machine family 
+- example e2-standard-2
+-> e2 - machine type family 
+-> standar - type of workload 
+-> 2 - number of CPUs 
+The higher the memory, disk, and networking capabilities increases along with vCPUs
+
+2. Image - this is the operating system and what software one needs to  the instance 
+Type of Images 
+    a) Public Images - provided & maintained by Google or Open source communities or third party vendors
+    b) Custom Images - created by you for your projects 
+    
