@@ -1,1 +1,30 @@
-REGIONS
+REGIONS & ZONES
+- regions are used to avoid latency for application users
+- this creates slow access to users 
+- applications should be deployed in more than one region and they should be near the users to avoid latency 
+- applications served from more than one region will solve the problem of if data center goes offline, the other 
+  will still have a back up. 
+- this creates high availability and low latency .
+- 
+
+1. Regions 
+- gcp provides 20 + regions around the world. 
+- region is specific geographic location to hold your resources.
+- eg mumbai, london, sidney region 
+- applications deployed in multiple regions leads to high availability.
+- low latency is also solved since users will be served with resources near them. 
+- global availability and frontprint 
+- adherance to government regulation eg data related to US customers should only be housed in US regions 
+- 
+
+2. Zones 
+- in regions, there are multiple zones 
+- in gcp there are atleast 3 zones in a region 
+- this creates increased availability and fault tolerance within the same region 
+- application can be deployed to any of the zones so that even if one zone is offline, the other remaining zones 
+    will still serve the application. 
+- each of these zones has one or more discrete clusters. Where a cluster is distinct physical infrastructure that is 
+    housed in a data center.
+- zones in regions are connected through low-latency links. 
+- eg application deployed in zone 1 and the db deployed in zone 2 will create a good performance. 
+- eg us-west1 The Dallas,Oregon, North America 3 Zones, us-west1-a, us-west1-b,us-west1-c 
