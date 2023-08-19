@@ -7,7 +7,7 @@ GCP COMPUTE ENGINE
  - 5. playing with static ip addresses
  - 6. understanding static ip address in gcp 
 
-
+a) 
  - applications are deployed in servers 
  - in the cloud, applications are deployed in virtual servers 
  - this is where the compute engine come in. 
@@ -20,7 +20,7 @@ GCP COMPUTE ENGINE
  - allows to manage network connectivity and configuration to vm instances 
  - 
 
- Compute Engine Machine Family 
+ b) Compute Engine Machine Family 
  1. Hardware - has machine family and machine type 
     different machines families are for different work loads 
     a) General Purpose(E2, N2, N2D, N1) best price-performance ration 
@@ -42,4 +42,56 @@ The higher the memory, disk, and networking capabilities increases along with vC
 Type of Images 
     a) Public Images - provided & maintained by Google or Open source communities or third party vendors
     b) Custom Images - created by you for your projects 
+
+
+c) Ip Addresses 
+1. External IP - are internet accessible. Can reach the machine through a browser.
+2. Internal IP - are internal to a corporate network. Can only be used inside google cloud network 
+NB: Two resources cannot have the same external ip addresses. 
+Two different corporate networks can have resources with the same Internal IP address. 
+All VM instances are assigned atleast one Internal IP address.
+When a vm instance is stopped, the external ip address is lost 
+To get a constant ip address, you can use static pi address
+This is found in VPC Network tab 
+Click on 'Reserve Static Address'
+The ip address becomes static and can be assigned to a virtual machine 
+click on 'Reassign to another resource'
+
+NB: Static IP Address
+1. can be switched from one vm instance to another vm instance
+2. it remains attached even if the instance is stopped 
+3. static ip is billed both when using and when using it. Release static ip which you are not using 
+
+d) Simplify VM HTTP Server Setup 
+- how do we reduce steps in creating vm instance 
+- 1. using startup script 
+     - Bootstrapping: install OS patches or software when a vm instance is launched.
+     - in the virtual machine you can configure startup script to bootstrap
+     - create a vm -> management-security-disk networking -> startup script
+     - write the exact script and create
+     -  
+
+- 2. instance template 
+     - instance template defines machine type, image, labels, startup script and other properties
+     - used to create vm instances and instance groups
+     - CANNOT be updated 
+     - it can also specify image family eg debian-9
+     - if family is not specified, the latest non deprecated image family is used 
+     - go to vm instances -> instance templates -> create new instance template -> management -> start up script -> create 
+- 3. custom image 
+     - reduces launch time. 
+     - can be created from vm instance, persistent disk, snapshot, another image, or a file in Cloud Storage 
+     - recommendation is customize images to your corporate security standards. (Hardening Image)
+     - prefer custom image to startup script 
+     - in vm -> disk -> actions -> create image -> create 
+     NB: should never create image from a disk on a running instance. 
+
+e) Debug Problems in VM 
+- make sure to use external ip 
+- ssh into the machine 
+- make sure packages are well installed 
+- check content with 'cat' commands 
+- 
+
+
     
