@@ -1,0 +1,142 @@
+1. Sustained Use Discounts
+- it is automatic discounts for running vm instances for significant portion of the billing month.
+- example, for n1,n2 machine types, use for more than 25% of a month you get 20% to 50% discount on every 
+    incremental minute. 
+- the discount increases with usage 
+- no action is required on your part. 
+- it is applicable for instances created by kubernetes engine and compute engine 
+- RESTRICTION: does not apply on certain machine types like E2 & A2. 
+- also does not apply to vms created by App Engine flexible and Dataflow 
+- are automatically applied for GKE and Compute Engine 
+
+2. Commited Use Discounts 
+- recommended for workloads with predictable resource needs.
+- can commit for 1 year or 3 years.
+- you will get upto 70% discount based on machine type and GPUs.
+- applicable for instances created by GKE and Compute Engines 
+- restricted for vms created by App Engine flexible and Dataflow. 
+
+3. Preemptible VMs 
+- are short lived cheaper ( upto 80% ) compute instances. 
+- can be stopped by GCP any time (preemted) within 24 hours. 
+- instances get 30 seconds warning to save anything they want to save. 
+- use preemptive vms when;
+    1. your applications are fault tolerant
+    2. you are very cost sensitive. 
+    3. your workload is not immediate. 
+    4. eg non immediate batch processing jobs
+- Restrictions: 
+    - not always available.
+    - no sla and cannot be migrated to regular vm 
+    - no automatic restart them 
+    - free tier credits are not applicable 
+NB: Lasts only 24 hours 
+
+4. Spot VMs 
+- they are the latest versions of preemptible VMs 
+- different from preemptible vms in that, they have no maximum runtime like preemptible vms
+- other features are similar to preemptible vms 
+- not always available. 
+- dynamic pricing from 60% to 91% discount compared to on demand VMs 
+- Free Tier credits not applicable. 
+- 
+
+5. Compute Engine Billing 
+- you are billed by seconds (after a minimum of 1 minute)
+- you are not billed for compute whne the compute instance is stopped 
+- you however, you will be billed for any storage attached to it. 
+RECOMMENDATION: always create 'Budget Alerts' and make use of budget exports to stay on top of billing. 
+- On Navigation, pick billings -> budget & alerts. 
+- you can  reate budget alerts and email billing to admins and users when charges exceed certain amount.
+- 
+
+6. Compute Engine:Live Miration & Availability Policy
+- how do you keep your vm instaces running when a host system needs to be updated(software or hardware needs to be updated)
+- compute engine provide a feature called Live Migration 
+- here, your running instance will be migrated to another host in the same zone.
+- Does not change any attribute or the properties of the VM 
+- supported for instances local SSDs 
+- not supported for GPUs and preemtible instances. 
+Important Configuration - Availability Policy 
+- this is where live migration is configured 
+- on host maintenance:configures what should happen during periodic infrastructure maintenance. 
+    1. The default is migrate to another host 
+    2. terminate the instance
+    3. automatic restart - restarts vm instance if they are terminated due to non-user-initiated reasons.  
+- 
+
+7. Compute Engine Features: Custom Machine Types 
+- what do you do when predefined VM options are NOT appropriate?
+- you can create a machine type customized to your needs. (Custom Machine Type)
+- they adjust vCPUs , memory and GPUs. The choice is between E2, N2, or N1 machine types only. 
+- supports various OS eg CentOS, CoreOS, Debian, Red Hat, Ubuntu, Windows etc.
+- it is billed per vCPUs and memory provisioned to each instance.
+- to configure a custom vm; 
+vm instance -> new vm instance -> machine type -> custom 
+
+8. Compute Engine Features 
+    a) GPUs
+    - Graphic Processing Unit
+    - used for accelerateing math intensive and graphics-intensive workloads for AI/ML etc 
+    - Adds a GPU to your VM 
+    - gives high performance for math intensive and graphic intensive workloads 
+    - has higher cost 
+    NB: Use images with GPU libraries (Deep Learning) installed. If not, your GPU will not be used 
+    GPU Restrictions: 
+    - not supported on all machine types. (Not supported on shared-core or memory-optimized machine types)
+    - on host maintenance, it will be a terminated vm instance. 
+    - recommended availability policy for GPUs is automatic restart-on 
+    - 
+
+9. VMs Nota Benas
+- a virtual machine is associated with a project.
+- machine type availability vary from region to region 
+- you can only change the machine type when it is stopped. 
+- vms can be filtered by their properties. can be name, zone or machine type, network tabs, labels, status. 
+- instances are created on specific zones
+- images are global
+- instance templates are also global 
+- automatic basing monitoring is enable on every vm. 
+- 
+
+10. VM - Best Practices
+- choose right zone and right region. This is based on const, regulation,availability, latency, and hardware needs. 
+- distribute instances in multiple zones, regions for high availability. 
+- choose right machine types for your needs. 
+- play with them to find out the right machine type 
+- use gpu for math and graphic intensive apps 
+- for applications running for a long time, use 'committed use discounts' for constant work loads
+- for fault tolerant workload use preemptible instances 
+- use labels to indicate environment, team, business unit etc 
+- 
+
+11. Compute Engine Scenarios 
+a) Prerequesite to create VM instances 
+- project 
+- billing account 
+- Compute Engine Enabled 
+- 
+b) You want dedicated hardware for compliance, licensing, and management needs.
+- search sole-tenant node 
+- 
+c) I have 1000 VMs I want to automate OS patch management 
+- go to VM Manager, OS patch management 
+
+c) Log into VM instance and install software 
+- use SSH to log into the machine 
+
+d) You do not want to expose VM to internet 
+- DO NOT assign external IP addresses 
+- configure firewall rules 
+- disable http traffic and https traffic 
+
+12. Review 
+Image - OS and what software 
+Machine Types - optimized combinantion of compute(CPU, GPU), memory disk (storage) and networking for workloads. Can custom VM 
+Sustained use discounts: Automatic discounts for running VM instances for significant portion of the billing month 
+Committed use discounts: 1 year or 3 year reservations for workloads with predictable resource needs.
+Preemptible Vm short lived cheaper upto 80% for non time critical fault tolerant workloads. 
+
+
+
+
