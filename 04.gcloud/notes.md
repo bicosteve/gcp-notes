@@ -93,3 +93,39 @@ Scenario: You are working on multiple projects from the same machine. You would 
   ------shutdown script
   --network --subnet --network-tier
   --accelerator="type=nvidia-tesla-v100,count=8"
+
+#### 6. Compute instances - default region and zone
+
+- There are three options
+  1. Option 1 - Centralized Configuration: gcloud compute project-info add-metadata. This can also be set
+     in the gcp console on VM -> Settings ->
+     --metadata=[google-compute-default-region=REGION | google-compute-default-zone=ZONE]
+  2. Option 2 - Local Configuration: gcloud config set compute/region REGION
+  3. Option 3 - Command Specific: --zone or --region in the command
+     NB: option 3 if exists ovveride option 2 if exists overrides option 1
+
+#### 7. List & Describe Commands
+
+- list commands are used to 'list' a set of resources.
+- gcloud compute 'resources' list
+- gcloud compute instances list, gcloud compute images list
+- list command suppport few common options
+- eg gcloud compute zone list --filter=region:us-west2
+- gcloud compute zones list --sort-by=region
+- describe commands: gives more information about a specific resources
+
+#### 8. Playing with Compute Instances
+
+- playing with compute instances includes;
+- gcloud compute instances list/start/stop/delete/reset/describe/move
+- gcloud compute instances stop example-instance
+- gcloud compute instances delete example-instance. Attach a --delete-disks=VALUE(all or data or boot)
+- gcloud compute instances move example-instance-1 --zone us-central1-b --destination-zone us-central1-c
+
+#### 9. Instance Template
+
+- gcloud compute instance-templates create/delete/describe/list
+- gcloud compute instance-templates list
+- gcloud compute instance-templates create instance-example: will be created with default configuration
+- gcloud compute instance-templates delete instance-example
+- gcloud compute instance-templates describe instance-example
