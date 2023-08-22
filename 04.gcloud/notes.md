@@ -46,7 +46,7 @@
 
 Scenario: You are working on multiple projects from the same machine. You would want to be able to execute commands using different configurations. Easily switch from projects
 
-- check for configurations with gcloud config configurations list
+- check for configurations with 'gcloud config configurations list'
 - will return all the configurations associated with your account
 - gcloud config configurations create <configuration name>
 - gcloud config configurations create my-configuration
@@ -55,3 +55,41 @@ Scenario: You are working on multiple projects from the same machine. You would 
 - gcloud config set project <my_project>
 - will set the project in the current configuration
 - activate a configuration with gcloud config configurations activate my-default-configurations
+
+#### 4. Gcloud Command Structure
+
+- takes this format gcloud GROUP SUBGROUP ACTION ...
+- GROUP - config or compute or container or dataflow or functions or iam or . These are services.
+- SUBGROUP - instances or images or instance-templates or machine-types or regions or zones.
+- ACTION - create or list or start or stop or describe or . what you want to do.
+- example - gcloud compute instances list: list all the compute instances.
+- example - gcloud compute instances create first-instance.
+- will create first instance with specific region on config on gcloud.
+- example - gcloud compute instances describe first-instance: give details around the specific instance.
+- example - gcloud compute instances delete first-instance.
+- example - gcloud compute zones list
+- example - gcloud compute regions list
+- example - gcloud compute machine-types list
+- example - gcloud compute machine-types list --filter='zone:us-central1-b'
+- example - gcloud cmpute machine-types list
+- filter multiple zones gcloud compute machine-types list --filter zone:"(asia-southeast2-b asia-southeast2-c)"
+
+#### 5. gcloud compute instances create: in-depth
+
+- create and instance -> gcloud compute instances create my-instance
+- options:
+  --machine-type: gcloud compute instances create my-instance --machine-type e2-highcpu-4
+  --custom-cpu --custom-memory --custom-vm-type(n1/n2) (custom machine)
+  gcloud compute instances crate my-instance --custom-cpu 6 --custom-memory 3072MB --custom-vm-type n2
+  --image or --image-family or --source-snapshot or --source-instance-template or --source-machine-image(beta)
+  --service-account --no-service-account
+  --tags
+  --zone=us-central1-b
+  --preemptible
+  --restart-on-failure(default) --no-restart-on-failure --maintainance-policy(Migrate(default)/Terminate)
+  --boot-disk-size --boot-disk-type --boot-disk-auto-delete --no-boot-disk-auto-delete
+  --deletion-protection --no-deletion-protection(default)
+  --metadata/metadata-from-file startup-script/startup-script-url
+  ------shutdown script
+  --network --subnet --network-tier
+  --accelerator="type=nvidia-tesla-v100,count=8"
