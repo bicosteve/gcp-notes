@@ -82,7 +82,33 @@
 - you can set up the auto scaling with;
 - gcloud compute instance-groups managed set-autoscaling my-mig --max-num-replicas=10
 - gcloud compute instance-groups managed set-autoscaling my-mig --min-num-replicas=4
-- you can stop auto scaling with;
+- 3. you can stop auto scaling with;
 - gcloud compute instance-groups managed stop-autoscaling my-mig --zone us-central1-a
-- update existing MIG policies;
+- 4. update existing MIG policies;
 - gcloud compute instance-groups managed update my-mig
+
+### Update Managed Instance Groups
+
+- 1. You can resize the group.
+- gcloud compute instance-groups managed resize <my-mig> --size=<size>
+- gcloud compute instance-groups managed resize my-mig --size=5
+- 2. Recreate one or more instances
+- gcloud compute instance-groups managed recreate-instances my-mig --instances=my-instance-1,my-instance-2
+- 3. Update specific instance
+- gcloud compute instance-groups managed update-instances my-mig --instances=my-instance-3,my-instance-4 --minimal-action=none(default)/refresh/replace/restart --most-disruptive-allowed-action=none(default)/refresh/replace/restart
+- 4. Update instance template
+- gcloud compute instance-groups managed set-instance-template my-mig --template=v2-template
+- NB: After updating a template, you can trigger roll out of the new template using update-instances, recreate-instances or rolling-action start-update commands.
+
+### Managed Instance Groups - Rolling Actions
+
+- Scenario: you want to manage your new release - v1 to v2 without down time.
+- 1. Restart(stop&start) gcloud compute instance-groups managed rolling-action restart my-mig
+- max-surge --max-surge=5 or 10% (Max number of instances updated at a time).
+- 2. Replace(delete & recreate) - gcloud compute instance-groups managed rolling-action replace my-mig
+- configure maximum surge with --max-surge=5 or 10% (max number of instances updated at a time)
+- can configure number of instances that can be down --max-unavailable=5 or 10% (number of instances that can be down for the update)
+- can configure a replacement method --replacement-method=recreate/subsitute (substitute (default) creates instances with new names, recreate, reuses names).
+- 3. Update Instance to a new template.
+- a) Basic Version (Update all instances slowly step by step) - gcloud compute instance-groups managed rolling-action start-update my-mig --version=template=v1-template
+- b) Canary Version (Update a subset of instances to v2) - gcloud compute instance-groups managed rolling-action start-update my-mig --version=template=v1-template --canary-version=template=v2-template,target-size=10%
