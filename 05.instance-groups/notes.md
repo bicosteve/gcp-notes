@@ -49,6 +49,23 @@
 
 ### Updating Managed Instance Group
 
-- 1. Rolling Update - this gradual update of instances in an instance group to the new instance templage. You need to specify a new template or optionally specify a template for canary testing. Specify How Updates Should Be Done - start the update immediately (Proactive) or when an instance group is resized later. (Opportunistic). How should the update happend. Maximum surge; how many instances are added at any point in time. Can also set the number of instances that can be offline during the update-maximum unavailable.
+- 1. Rolling Update - this gradual update of instances in an instance group to the new instance template. You need to specify a new template or optionally specify a template for canary testing. Specify How Updates Should Be Done - start the update immediately (Proactive) or when an instance group is resized later. (Opportunistic). How should the update happend. Maximum surge; how many instances are added at any point in time. Can also set the number of instances that can be offline during the update-maximum unavailable.
 
 - 2. Rolling Restart/Replace - Gradual restart or replace of all instances in the group. There is no change in template but you want to replace/restart the existing VMs.
+
+### Instance Group Scenarios
+
+- 1. **Scenario:** You want MIG managed application to survive zonal failures.
+- **Solution:** Create multiple zone MIG (or regional MIG)
+- 2. **Scenario:** You want to create VMs of different configurations in the same group.
+- **Solution:** Create un-managed instance groups.
+- 3. **Scenario:** You want to preserve VM state in an MIG
+- **Solution:** Stateful MIG-Preserver VM state(instance name, attached persistent disk, metadata). Recommended for stateful workloads like database, data processing apps
+- 3. **Scenario:** You want a high availability in an MIG even when there are hardware/software updates.
+- **Solution:** Use an instance tempale with availability policy automatic restart enabled & oh-host maintenance; migrate ensure live migration and automatic restarts.
+- 4. **Scenario:** You want unhealthy instances to be automatically replaced
+- **Solution:** Configure a health on the MIG (self healing)
+- 5. **Scenario:** Avoid frequent scale ups and scale downs
+- **Solution:** Cool down period and initial delay
+
+### Managed Instance On The Terminal
