@@ -69,3 +69,20 @@
 - **Solution:** Cool down period and initial delay
 
 ### Managed Instance On The Terminal
+
+- 1. to check for managed instance groups
+- gcloud compute instance-groups managed <option>
+- eg gcloud compute instance-groups managed list
+- 2. create managed instance group
+- gcloud compute instance-groups managed create my-mig --zone us-central1-a --template my-instance-template --size 1.
+- eg gcloup compute instance-groups managed create my-mig --zone us-central1-a --template rest-api-template --size 2
+- you can add the --health-check flag with --health-check=HEALTH_CHECK
+- you can add --initial-delay for how much time should be given before the instance start
+- other commands are gcloud compute instance-groups managed delete/describe/list
+- you can set up the auto scaling with;
+- gcloud compute instance-groups managed set-autoscaling my-mig --max-num-replicas=10
+- gcloud compute instance-groups managed set-autoscaling my-mig --min-num-replicas=4
+- you can stop auto scaling with;
+- gcloud compute instance-groups managed stop-autoscaling my-mig --zone us-central1-a
+- update existing MIG policies;
+- gcloud compute instance-groups managed update my-mig
