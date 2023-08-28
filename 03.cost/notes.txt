@@ -18,7 +18,7 @@
 
 3. Preemptible VMs 
 - are short lived cheaper ( upto 80% ) compute instances. 
-- can be stopped by GCP any time (preemted) within 24 hours. 
+- can be stopped by GCP any time (preempted) within 24 hours. 
 - instances get 30 seconds warning to save anything they want to save. 
 - use preemptive vms when;
     1. your applications are fault tolerant
