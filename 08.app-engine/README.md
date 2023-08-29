@@ -50,3 +50,11 @@ App Engine
 
 ## App Engine Comparison
 
+1. Pricing factors: Instance hours for standard and vCPU, memory & persisten disk for flexible.
+2. Scaling: Manual, basic, automatic for standard and manual,automatic for flexible.
+3. Scaling to Zero: with standard you can scale to zero instances while for flexible no minimum one instance.
+4. Instance Startup time: it is seconds for standard and minutes for flexible.
+5. Rapid scaling: for standard you can rapidly scale but for flexible you cannot.
+6. Maximum request time out: 1-10 mins for standard and 60 minutes for flexible.
+7. Local Disk: Most can write to /tmp for standard and ephemeral. New disk on startup for flexible.
+8. SSH for debugging: Standard does not allow while flexible allows.
