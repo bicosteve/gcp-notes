@@ -40,7 +40,7 @@ App Engine
      Supports ANY runtime eg Python, Go, Java etc.
      Provides access to background processes and local disks.
 
-## App Engine - Application Component Hierarchy.
+## App Engine - Application Component Hierarchy
 
 - Application -> Service -> Version -> Instance
 
@@ -63,7 +63,7 @@ App Engine
 
 There are different ways of scaling app engine instances.
 
-1. Automatic Scaling.
+1; Automatic Scaling.
 
 - this is automatically scaling instances bases on the load.
 - it is recommended for continously running workloads.
@@ -73,7 +73,7 @@ There are different ways of scaling app engine instances.
   - Maximum Concurrent Request - configure maximum concurrent requests an instance can receive.
 - configure Max Instances & Min Instances.
 
-2. Basic
+2; Basic
 
 - Creates instances when requests are received.
 - It is recommended for adhoc workload.
@@ -82,7 +82,7 @@ There are different ways of scaling app engine instances.
 - It is not supported by app engine flexible.
 - can configure max instances to go upto and idle time out.
 
-3. Manual
+3; Manual
 
 - configure specific number of instances to run.
 - adjust number of instances manually over time.
