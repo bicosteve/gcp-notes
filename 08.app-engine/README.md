@@ -58,3 +58,31 @@ App Engine
 6. Maximum request time out: 1-10 mins for standard and 60 minutes for flexible.
 7. Local Disk: Most can write to /tmp for standard and ephemeral. New disk on startup for flexible.
 8. SSH for debugging: Standard does not allow while flexible allows.
+
+## App Engine Scaling Instances
+
+There are different ways of scaling app engine instances.
+
+1. Automatic Scaling.
+
+- this is automatically scaling instances bases on the load.
+- it is recommended for continously running workloads.
+- can auto scale based on;
+  - Target CPU Utilization - configure a CPU usage threshhold.
+  - Target Throughput Utilization - configure a throughput threshold.
+  - Maximum Concurrent Request - configure maximum concurrent requests an instance can receive.
+- configure Max Instances & Min Instances.
+
+2. Basic
+
+- Creates instances when requests are received.
+- It is recommended for adhoc workload.
+- When there is no load/request instances are shut down.
+- High latency is possible because new instances have to be created when requests are made.
+- It is not supported by app engine flexible.
+- can configure max instances to go upto and idle time out.
+
+3. Manual
+
+- configure specific number of instances to run.
+- adjust number of instances manually over time.
