@@ -86,3 +86,80 @@ There are different ways of scaling app engine instances.
 
 - configure specific number of instances to run.
 - adjust number of instances manually over time.
+
+## App Engine Demo
+
+- create a project in gcp
+- enable app engine api
+- create an app engine project
+- open cloud shell editor
+- drag and drop your project or create your project from the editor.
+- check for the projects configs with gcloud config list
+- set your project with gcloud config set project PROJECT_ID
+- cd into the folder which has project entry point
+- run gcloud app deploy <.yaml> file
+- select 'y'
+- the app will be deployed.
+- run gcloud app browse
+- check running services with gcloud app services list
+- check runnign version with gcloud app versions list
+- check for app instances with gcloud app instances list
+- deploy a new version with gcloud app deploy --version=v2
+- check app url with gcloud app browse --version="version"
+
+## App Engine Split Traffic between versions
+
+- deploying to a new version and switching traffic to it is a bad idea.
+- you need to deploy new version and slowly switch traffic to it.
+- gcloud app deploy --version=v3 --no-promote
+- NB: default is promote which transfers traffic immediately
+- to check new version use; 'gcloud app browse --version v3' to get the url
+- split traffic between the two versions
+- gloud app services set-traffic splits=v3=.5,v2=.5
+- traffic is split by ip address
+- you can split traffic by a different option
+- gloud app services set-traffic splits=v3=.5,v2=.5 --split-by=random
+- to set traffic to v3, gcloud app services set-traffic --splits=v3
+- to see the requests use watch curl <app_url>
+
+## Configure Service Name For Deploy
+
+- you can configure a service name in app.yaml file then use this to deploy the app
+- use gcloud app deploy while inside the folder with the app.yml file
+- You can stream logs from the command line by running:
+- gcloud app logs tail -s bix-service
+- to view the application in the browser run
+- gcloud app browse -s <service-name>
+- gcloud app browse --service="<service-name>"
+
+## Things to Configure in app.yaml file
+
+runtime: python28 - the name of the runtime environment used by your app
+api_version: 1 - recommended - specify on gcloud app deploy -v [version]
+instance_class: F1
+service: service-name
+env: flex - this for containers
+
+inboud_services:
+
+- warm-up
+
+env_variables:
+ENV_VARIABLE: 'value'
+
+handlers:
+
+- url: /
+- script: home.app
+
+automatic_scaling:
+target_cpu_utilization: 0.65
+min_instances: 5
+max_instances: 100
+max_concurrent_requests: 50
+
+basic_scaling:
+max_instances: 11
+idle_timeout: 10m
+manual_scaling:
+instances: 5
