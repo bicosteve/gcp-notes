@@ -163,3 +163,154 @@ max_instances: 11
 idle_timeout: 10m
 manual_scaling:
 instances: 5
+
+## App Engine Request Routing
+
+- you can use a combination of 3 approaches;
+
+1. Routing with URLs:
+
+- https://project_id.region_id.r.appspot.com - default service called
+- https://service-dot-project_id.region_id.r.appspot.com - specific service
+- https://version-dot-service-dot-project_id.region_id.r.appspot.com - specific version of the service
+  -> replace the <dot> with your custom dormain name.
+
+2. Routing with Dispatch File
+
+- you can configure dispatch.yaml with routes.
+- use gcloud app deploy dispatch.yaml
+
+3. Route with Cloud Load Balancing.
+
+- configure routes on Load Balancing instance.
+-
+
+## App Engine - Deploy new versions without downtime.
+
+- How do I go from v1 to v2 without down time?
+
+1. Deploy and Shift all the traffic at once
+
+- deploy and shift all the traffic to v2 at once; gcloud app deploy
+
+2. Manage migration from v1 to v2
+
+- 1. deploy v2 without shifting traffic (--no-promote)
+- gcloud app deploy --no-promote.
+- shift traffic to v2.
+- gcloud app services set-traffic s1 --splits v2=1.
+- 2. gradual migration of traffic to v2. Add --migrate option.
+- gradual migration is not supported by App Engine Flexible Environment.
+- 3. Splitting Traffic - Control the pace of migration.
+- gcloud app services set-traffic s1 --splits=v2=.5
+- useful to perform A/B testing
+
+## How to Split Traffic Between Multiple Versions
+
+- How do you decide which version receives which traffic?
+- 1. IP Splitting - this based on request IP address
+- IP addresses can change causing accuracy issues eg going from one place to another.
+- if all request originate from a corporate vpn with single IP, this can cause all requests to go to the same version since most vpn have the same ip address.
+- 2. Cookie Splitting - Based on a cookie (GOOGAPPUID)
+- cookies can be controlled from your application
+- cookie splitting accurately assign users to versions.
+- include --split-by option on the gcloud app services set-traffic command
+- value must be one of these; cooke, ip or random.
+
+## App Engine Commands to remember
+
+-> gcloud app browse/create/deploy/describe/open-console
+
+- gcloud app create --region=us-central
+- gcloud app deploy app.yaml
+  -; also support containers
+- --image-url; this is only for flexible environments. Deploys docker image
+- gcloud app deploy --image-url <docker image url>
+- --promote --no-promote (sets whether the new version will receive traffic)
+- --stop-previous-version --no-stop-previous-version; should old version be stopped after new version receives all traffic.
+- --version (Assigns version. Otherwise a version number will be generated)
+
+- gcloud app browse --service="myService" --version="v1" (opens in a web browser)
+- gcloud app open-console --service="myService" --version="v1" (opens the service console)
+- gcloud app open-console --logs ()
+- gcloud app logs tail
+- gcloud app regions list - returns the regions which support app engine
+
+## Playing with App Engine Instances
+
+1. gcloud app instances delete/describe/list/scp/ssh
+
+- gcloud app instances delete i1 --service=s1 --version=v1
+- gcloud app instances describe --service=s1 --version=v1 i1
+- gcloud app instances list - lists number of instances which are running in app engine
+- gcloud app instances scp --service=s1 --version=v1 --recurse local_dir i1:remote_dir
+  -> this will copy files to/from App Engine Flexible instances
+- gcloud app instances ssh --service=s1 --version=v1 i1 (ssh into the vm of an app engine flexible instance)
+
+## Playing with App Engine Services and Versions
+
+1. gcloud app services browse/delete/describe/list/set-traffic
+
+- gcloud app services list - will list the app services running
+- gcloud app services browse myService --version="v1"
+- gcloud app services delete service1 service2
+- gcloud app services describe service1
+- gcloud app services set-traffic APP1 --splits v1=0.9,v2=0.1
+- --split_by (ip,cookie,random)
+
+2. gcloud app versions browse/delete/describe/list/migrate/start/stop
+
+- gcloud app versions list (--hide-no-traffic - will only show versions receiving traffic)
+- gcloud app versions browse/delete/describe v1 --service="myService"
+- gcloud app versions migrate v2 --service="myService" (migrates all the traffic to new version)
+- gcloud app versions start/stop v1 --service=myService. Only start/stop v1 of service myService
+
+## App Engine Cron Job
+
+- we can schedule jobs in app engine in the configure.yaml file and make app engine use that yaml
+  cron: - description: "Daily Summary Job"
+  url: /tasks/summary
+  schedule: every 24 hours
+- use cases are;
+
+1. send a report by email every day.
+2. refresh cache data every 30 minutes
+
+- configure a file cron.yaml
+- run this command gcloud app deploy cron.yaml
+- performs a http get request on the configured url
+
+## Other Important App Engine yaml Files
+
+1. dispatch.yaml - ovverides routing rules
+2. queue.yaml - manage task queues
+
+- deploy using;
+- gcloud app deploy dispatch.yaml
+- gcloud app deploy queue.yaml
+
+## App Engine NBs
+
+- app engine is regional and the services are deployed across zones.
+- you cannot change applications region
+- good option for simple microservices multiple services
+- can use standard v2 for any surpported languages
+- use flexible if you are building containerized apps
+
+- Be aware, Atleast one container is always running when using flexible
+- App engine flexible will not scale to 0
+- App engine standard will scale to 0 when there is no traffic
+- use a combination of resident and dynamic instances
+
+1. Resident Instances: run continously
+2. Dynamic Instances: Added based on load
+
+## App Engine Scenarios
+
+1. I want to create two app engine in same project - You can only have one app engine per project. You have multiple services.
+2. I want to create two services inside the same app - yes you can create multiple services
+3. I want to move my app engine to a different region - app engine regions is specific and cannot be moved to another region once created.
+4. Perform Canary Deployments;
+
+- gcloud app deploy --no-promote
+- gcloud app services set-traffic s1 --splits v1=0.9,v2=0.1

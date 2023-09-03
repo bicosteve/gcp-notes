@@ -1,0 +1,5 @@
+dispatch:
+  - url: '*/mobile/*'
+    service: mobile-frontend
+  - url: '*/work/*'
+    service: static-backend
