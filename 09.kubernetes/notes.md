@@ -60,4 +60,60 @@ Microservice Journey
   - curl <external_ip:8080/hello-world> - should return hello world
   - curl 34.176.179.85:8080/hello-world
 
-3. Play with it
+3. Play with it - DONE
+
+4. Increasing Number of Instances of Microservices
+   kubectl scale deployment k8s-rest-api --replicas=3
+   kubectl get pods
+   kubectl get deployments
+
+5. Manual Scaling of the number of nodes in your Kubernetes cluster.
+   can increase or decrease the number of nodes in your cluster
+   gcloud container clusters resize <cluster-name> --node-pool <the-node-pool> --num-nodes=<node-number> --zone=<zone>
+   gcloud container clusters resize gcp-k8s-cluster --node-pool default-pool --num-nodes=5 --zone=southamerica-west1-b
+
+6. Auto Scaling the Microservices
+   can set up auto scaling for your services
+   kubectl autoscale deployment k8s-rest-api --max=4 --cpu-percent=70
+   this creates horizontal pod autoscaling - HPA - kubectl get hpa
+
+7. Set Up Auto Scaling For Your Cluster
+   gcloud container clusters update cluster-name --enable-autoscaling --min-nodes=1 --max-nodes=10
+   gcloud container clusters update k8s-rest-api --enable-autoscaling --min-nodes=1 --max-nodes=10
+   this will increase the number of nodes in the cluster and set min nodes to be 1 and max nodes to be 10
+
+8. Configure/Add application Configuration Microservice
+   a kubernetes ConfigMap is an API object that allows you to store data as key-value pairs.
+   kubernetes pods can use ConfigMaps as configuration files, environment variables or command-line arguments.
+   use config map
+   kubectl create configmap my-config --from-literal=DB_NAME=todos
+   kubectl create configmap k8s-rest-api --from-literal=k8s-rest-api-db
+   kubectl get configmap
+   kubectl get configmap k8s-rest-api
+   kubectl describe configmap k8s-rest-api
+
+9. Storing Secrets like Passwords for your micro services
+   kubectl create secret generic k8s-rest-api-secrets --from-literal=PASSWORD=pass1234
+   kubectl get secret
+   kubectl describe secret k8s-rest-api-secrets
+
+NB: to store configurations, use config map. To store password use secret
+Executing Commands is called imperative style.
+Writing yaml is called declarative style.
+use kubectl apply -f file.yml
+to use the k8s-rest-api configs, run kubectl apply -f k8s-rest-api
+
+10. Deploy a new microservice which needs nodes with a GPU attached.
+    attach a new node pool with GPU instances to your cluster
+    gcloud container node-pools create POOL_NAME --cluster CLUSTER_NAME
+    gcloud container node-pools list --zone=us-central1-c --cluster=k8s-rest-api
+    Deploy an new microservice to the new pool by setting up nodeSelector in the deployment.yml
+    : nodeSelector: cloud.google.com/gke-nodepool:POOL_NAME
+
+11. Delete the Microservice
+
+    1. kubectl delete service <service-name>
+    2. kubectl delete deployment <deployment-name>
+
+12. Delete the Cluster
+    gcloud container cluster delete <cluster-name>

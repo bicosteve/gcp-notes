@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: k8s-rest-api
+  name: k8s-rest-api
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-rest-api
+  template:
+    metadata:
+      labels:
+        app: k8s-rest-api
+    spec:
+      containers:
+        - image: in28min/hello-world-rest-api:0.0.1.RELEASE
+          name: k8s-rest-api
