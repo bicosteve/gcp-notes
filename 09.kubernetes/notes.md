@@ -117,3 +117,122 @@ to use the k8s-rest-api configs, run kubectl apply -f k8s-rest-api
 
 12. Delete the Cluster
     gcloud container cluster delete <cluster-name>
+
+13. Important Notes
+
+    1. Cluster - this where you run your workload. Must create a cluster
+       it is a group of compute engine instances.
+       has master node and workers
+       worker nodes run workload or pods.
+       Master node has;
+
+    a). Api Server - which handles all the communications for k8s cluster from nodes and outside
+    b). Schedular - decides placement of pods.
+    c). Control Manager - manages deployments and replicasets
+    d). etcd - distributed database storing the state of the cluster
+    Worker nodes;
+    this is where pods run
+    kubelet - worker nodes talk to master node through kubelets
+
+    Types of Cluster
+    Zonal Cluster;
+
+    - single zone with single control plane. Nodes run in the same zone.
+    - multi zone single control plane but nodes are running in multiple zones.
+
+    Regional Cluster;
+    Replicas of the control plane run in multiple zones of a given region.
+    Nodes also run in same zones where control plane runs
+
+    Private Cluster;
+    Specific to virtual private cluster.
+    Nodes only have internal IP addresses
+
+    Alpha Cluster;
+    Clusters with alpha APIs - early feature APIs. Used to test new K8S features
+
+    2. Pods - are smallest deployable units in a K8s
+       contains one or more containers.
+       Each pod has one or more ephemoral IP address.
+       most pods however only has one container
+       all containers in the same pod share;
+
+       - network
+       - storage
+       - ip address
+       - ports
+       - volumes
+         Pods status can be running, pending, suceeded, failed, unknown
+
+    3. Deployment
+       a deployment is created for each microservice
+       kubectl create deployment my-deployment --image=m1:v1
+       single deployment represent a microservice with all its releases
+       deployment manages new releases ensuring zero downtime
+       update deployment image with;
+       kubectl set image deployment k8s-rest-api k8s-rest-api=in28min/hello-world-rest-api:0.0.2.RELEASE
+
+    4. ReplicaSet
+       ensures that a specific number of pods are running for a specific microservice version.
+       when you delete one pod in a cluster, the replicaset maintains the state number of replicasets
+       even if one pod is killed, ReplicaSet will make sure the state of replicas is maintained as per configs
+
+    5. Service
+       each pod has its own IP address.
+       when a pod fails, it is replaced by a replicaset.
+       when things change internally in a cluster, it does not affect external users.
+       services exposes your deployment to your users on the outside world.
+       create a service with kubectl expose deployment <name> --type=LoadBalancer --port=9090
+       services ensures external world is not affected when things are changing in a cluster
+       there are various types of services
+       a) ClusterIP - Exposes service on a cluster internal IP. This cannot be reached from outside world but internally in a cluster. This is for intra cluster communication.
+       b) LoadBalancer - exposes a service externally using a cloud provider's load balancer.
+       This will work in any cloud
+       Use Case is when you want to create individual LoadBalancer for a microservice.
+       c) NodePort - Exposes Service on each Node's IP at a static port (NordPort)
+       Use case;
+       you do not want to create an external LoadBalancer for each microservice
+       you can create one Ingress component to load balance multiple microservices.
+
+14. Container Registry/Image Repository
+    you have created docker images for your services, where do you store them?
+    they are stored in **_Container Registry_** provided by GCP.
+    alternative is docker hub
+    can be integrated to CI/CD tools and publish to container registry
+    you can secure your container images, analyze vulnerabilities and enforce deployment policies
+    naming convention: hostname/projectid/image:tag
+    eg gcr.io/projectname/helloworld:1
+    NB: container registry is private by default.
+
+15. GKE to Remember
+    always replicate master nodes across multiple zones for high availability.
+    some CPU on the node is reseved by control plane
+    creating a docker image for your microservices in Dockerfile
+    you can build docker image with its version release
+    you can run your docker image with docker run -d -p 8080:9090 in28min/hello-world-rest-api:0.0.1.RELEASE
+    you can push it to container repository
+    kubernetes supports stateful deployment like Kafka, Redis, ZooKeeper
+    StatefulSet - set of pods with unique, persistent identities and stable hostnames.
+    you can run services on nodes for log collection or monitoring
+    use DaemonSet - One pod on every node. For background services
+    cloud monitoring and cloud logging can be used to monitor your kubernetes cluster.
+
+16. Scenarios
+    a) You want to keep cost low and optimize GKE implementation
+    consider preemtible VMs, Appropriate Region, Committed-use discounts
+    E2 machine types are cheaper than N1
+    choose right environment to fit your workload type
+    b) You want efficient, completely auto scaling GKE solution
+    configure horizontal pod autoscaler for deployments and cluster autoscaler for node pools.
+    c) you want to execute untrusted third-party code ink8s clutster
+    create a node pool and run it there so that it does not affect your cluster pool
+    d) you want to enable ONLY internal communication between your microservice deployments in K8s cluster
+    use ClusterIP as object service type
+    e) my pod staying pending
+    most probably Pod cannot be scheduled onto a node(insufficient resource)
+    increase the number of nodes
+    f) my pods staying waiting
+    probably not able to pull the image.
+    you can also have access issues to the container registry
+
+17. Cluster Management - Command Line
