@@ -235,4 +235,62 @@ to use the k8s-rest-api configs, run kubectl apply -f k8s-rest-api
     probably not able to pull the image.
     you can also have access issues to the container registry
 
-17. Cluster Management - Command Line
+17. Cluster Management On Command Line
+
+    1. Creating a cluster;
+       gcloud container clusters create <cluster-name> --zone <zone> --node-locations <location>
+       gcloud container clusters create my-cluster --zone us-central1-a --node-locations us-central1-c,us-central1-b
+    2. Resize the cluster;
+       gcloud container clusters resize my-cluster --node-pool my-node-pool --num-nodes 10
+       gcloud container clusters resize bix8s-cluster --node-pool qa-pool --num-nodes 5
+
+    3. Autoscale Cluster;
+       gcloud container clusters update cluster-name --enable-autoscaling --min-nodes=1 --max-nodes=5
+       gcloud container clusters update bix8s-cluster --enable-autoscaling --min-nodes=2 --max-nodes=5
+    4. Delete Cluster;
+       gcloud container clusters delete bix8s-cluster
+    5. Adding Node Pool;
+       gcloud container node-pools create new-node-pool-name --cluster my cluster
+    6. List Images;
+       gcloud container images list
+
+18. Workload Management
+    **List Pods/Service/ReplicaSets;**
+    kubectl get pods/services/replicasets -o wide
+    **Create Deployment;**
+    kubectl apply -f deployment-file or kubectl create deployment
+    **Create Service;**
+    kubectl expose deployment <deployment-name> --type=LoadBalancer --port=9090
+    **Scale Deployment;**
+    kubectl scale deployment <my-deployment> --replica 5
+    **Auto Scale Deployment;**
+    kubectl autoscale deployment --max=10 --min=2 --cpu-percent=80
+    **Delete Deployment;**
+    kubectl delete deployment <deployment-name>
+    **Update Deployment;**
+    kubectl apply -f deployment.yml
+    **RollBack Deployment;**
+    kubectl rollout undo deployment <deployment-name> --to-revision=1
+    **Getting Projects**
+    gcloud project list
+    **Setting Project**
+    gcloud config set project <project-id>
+
+19. Delete GKE Resources
+    **Delete Services**
+    kubectl delete servive k8s-rest-api
+    **Delete Deployment**
+    kubectl delete deployment k8s-rest-api
+    **Delete Clusters**
+    gcloud container clusters delete <cluster-name> --zone <zone-name>
+    gcloud container clusters delete gcp-k8s-cluster --zone southamerica-west1-b
+
+20. Kubernetes Terminology - Review
+    **_Hardware (Cluster)_**
+    Master Node - manages the cluster
+    Worker Node - run your workloads
+    Node Pool - group of nodes in a cluster with the same configurations
+    **_Software_**
+    Pods - smallest deployable unit in kubernetes. Are deployed to Worker Nodes.
+    Deployments - Manages the pods
+    Service - exposes deployments
