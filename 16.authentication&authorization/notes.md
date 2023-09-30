@@ -64,3 +64,26 @@ IAM Policy
 Roles are assigned to users through IAM policy documents
 Represented by a policy object which has list of bindings which binds a role to a list of members.
 Member type is identified by prefix: eg user, serviceaccount, group, or admin.
+
+Playing with IAM
+Describe Current Project with gcloud
+
+1. gcloud compute set projec <project name>
+2. gcloud compute project-info describe <current project>
+   will list the services account and all the portals sorrounding it.
+3. gcoud auth login: will give access to gcp with google user credentials
+4. gcloud auth revoke: revokes access credentials for an account.
+5. gcloud auth list: list all the authorized accounts
+6. gcloud projects;
+
+- gcloud projects add-iam-policy-binding: Adds IAM policy binding. gcloud projects add-aim-policy-binding cp-k8s-398512 --member=user:bicosteve4@gmail.com --role=roles/storage.objectAdmin
+- gcloud projects get-iam-policy <project-name>: Get IAM policy for a project.Returns member and service account role. All the bindings particular to that project. Will also have the users and their roles.
+- gcloud projects remove iam-policy-binding p-k8s-398512 --member=user:bicosteve4@gmail.com --role=roles/storage.objectAdmin
+- gcloud projects delete <project-id>: Removes a project
+
+7. glcoud iam
+
+- gcloud iam roles describe roles/storage.objectAdmin: Describes an IAM role
+- glcoud iam roles create --project --permissions --stage: creates an iam role.
+- gcloud iam roles copy --source=rles/storage.objectAdmin --destination=my.custom.role --dest-project=cp-k8s-398512: copies IAM Roles.
+-
