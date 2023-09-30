@@ -86,4 +86,65 @@ Describe Current Project with gcloud
 - gcloud iam roles describe roles/storage.objectAdmin: Describes an IAM role
 - glcoud iam roles create --project --permissions --stage: creates an iam role.
 - gcloud iam roles copy --source=rles/storage.objectAdmin --destination=my.custom.role --dest-project=cp-k8s-398512: copies IAM Roles.
--
+
+Service Accounts
+Consider a scenario where an application on a VM needs access to cloud storage.
+You should not use personal credentials to allow access for the VM.
+The recommended approach is to use service account.
+Service account will be identified by an email address eg id-compute@developer.gserviceaccount.com
+When a compute engine or app engine is created, a service account is created for it too.
+The service account will also have all the permissions associated with the compute engine or app engine and will have specific email address too.
+It does have password associated with it
+Uses public and private key.
+You cannot use service account to login in with a browser or cookie. You will have to assign it to a VM and the VM will use it to make a call to a respective resources.
+There are few types of service accounts;
+
+1. Default Service Account;
+   automatically created when some services are used.
+   it is not recommended since it has Editor role.
+
+2. User Managed;
+   user can create his/her service account.
+   this is recommended since you can assign fine grained roles.
+   after creation, the service account can be assigned roles.
+   you can then assign your service account to VM instances.
+
+3. Google Managed Service Accounts;
+   used by GCP to perform operations on users behalf.
+   in general, we DONT need to worry about them.
+
+Service Account Use Cases.
+
+1. VM to Talk to Cloud Storage;
+   Create service account role with right permissions
+   Assign Service Account role to VM instance when it is starting up.
+   Key generation and use are automatically handle by IAM when we assign a service account to the instance.
+   No need for store credentials in the config files.
+   **Do NOT delete** service accounts used by running instances.
+
+2. On Premise to Cloud Storage (Long Lived)
+   Connecting an on premise marchine to cloud storage.
+   You **CANNOT ASSIGN SERVICE ACCOUNT** directly to an on premise application marchine
+   Create a Service Account with right permissions
+   Create service account with user managed keys on the console on 'Service Accounts' tab.
+   Can also use gcloud iam service-accounts keys create
+   Donwload the service account key file and keep it secure.
+   You cannot regenerate the key again
+   Make the servie account key file accessible to your application
+   Set an environment variable GOOGLE_APPLICATION_CREDENTIALS
+   set it to the path of the key file
+   export GOOGLE_APPLICATION_CREDENTIALS='/path_to_key_file/'
+   Use Google Cloud Client Libraries. The application default is Application Default Credentials(ADC)
+   ADC uses the servie account key file if env var GOOGLE_APPLICATION_CREDENTIALS exists
+
+3. On Premise to Google Cloud APIs (Short Lived)
+   You want to make calls from outside GCP to Google Cloud APIs with short lived permissions.
+   Permission for few hours or shorter.
+   Has less risks compared to sharing service account keys.
+   There few credential types recommended;
+   **OAuth 2.0 access tokens**
+   **OpenID Connect ID tokens**
+   **Self-signed JSON Web Tokens (JWT)**
+   Examples;
+   (a) When a member needs elevated permissions, he can assume the service account role (Create OAuth 2.0 access toke for service account). Service account with short lived access will be created to assist with this. This gives temporary access only.
+   (b) OpenID Connect ID tokens is recommended for service to service authentications. A Service in GCP needs to authenticate itself to a servic in other cloud.
