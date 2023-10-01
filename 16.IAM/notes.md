@@ -191,3 +191,11 @@ To create a Signed URL;
 1. Create a key (YOUR_KEY) for the Service Account/User with the desired permissions.
 2. Create Signed URL with the key;
    gsutil signurl -d 10m YOUR_KEY gs://BUCKET_NAME/OBJECT_PATH
+
+Cloud Storage - Static Websites
+This will assist in exposing a static website to the web.
+Steps;
+
+1. Create a bucket with the **same name** as website name (Name of bucket should match DNS name of the website). Verify you own the dormain name.
+2. Copy the files to the bucket. You can add index and error html files for a better user experience.
+3. Add member allUsers and grant Storage Object Viewer option. Do this on permissions tab on the bucket and add allUsers. Select allow public access.
