@@ -179,4 +179,15 @@ Two types of access controls;
    both bucket level and individual object level permissions.
 
 - Use uniform access when all users have same level of access across all objects in a bucket.
-- Fine grainded access with ACLs can be used when you need to customize the access at an object level.
+- Fine grained access with ACLs can be used when you need to customize the access at an object level.
+
+Cloud Storage - Signed URL
+You want to allow **limited time access** to a user to your objects.
+Users do not need Google accounts.
+Use **Signed URL** functionality.
+A URL that gives **permissions to limited time duration** to perform specific actions.
+To create a Signed URL;
+
+1. Create a key (YOUR_KEY) for the Service Account/User with the desired permissions.
+2. Create Signed URL with the key;
+   gsutil signurl -d 10m YOUR_KEY gs://BUCKET_NAME/OBJECT_PATH
