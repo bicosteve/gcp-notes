@@ -159,3 +159,24 @@ Service Account Scenarios;
    Solution: It is both. You can attach roles with Service Account(identity). You can let other members access a SA by granting them a role on the Service Account(resource).
 4. Scenario: VM instance with default Service Account in project A needs to access Cloud Storage bucket in project B.
    Solution: In project B, add the service account from project A and assign Storage Object Viewer Permissions on the bucket.
+
+Access Control Lists (ACL)
+ACL defines who has access to your buckets and objects as well as at what level of access they have.
+
+How is it different from IAM?
+IAM permissions apply to all objects within a bucket.
+ACL can be used to customized specific accesses to different objects.
+NB: User gets access if he is allowed by either IAM or ACL
+NB: Use IAM for common permissions to all objects in a bucket.
+NB: Use ACLs if you need to customize access to individual objects.
+
+Access Control - Overview
+How do you control access to objects in a Cloud Storage bucket?
+Two types of access controls;
+
+1. Uniform (Recommended) - Uniform bucket level access using IAM.
+2. Fine-grained - Use IAM and ACLs to control access;
+   both bucket level and individual object level permissions.
+
+- Use uniform access when all users have same level of access across all objects in a bucket.
+- Fine grainded access with ACLs can be used when you need to customize the access at an object level.
