@@ -148,3 +148,14 @@ Service Account Use Cases.
    Examples;
    (a) When a member needs elevated permissions, he can assume the service account role (Create OAuth 2.0 access toke for service account). Service account with short lived access will be created to assist with this. This gives temporary access only.
    (b) OpenID Connect ID tokens is recommended for service to service authentications. A Service in GCP needs to authenticate itself to a servic in other cloud.
+
+Service Account Scenarios;
+
+1. Scenario: Application on a VM wants to talk to a Cloud Storage Bucket
+   Solution: Configure the VM to use a Service Account with the right permissions.
+2. Scenario: Application on a VM wants to put a message on a Pub Sub Topic
+   Solution: Configure the VM to use a Service Account with the right permissions
+3. Scenario: Is Service Account and identity or a resource?
+   Solution: It is both. You can attach roles with Service Account(identity). You can let other members access a SA by granting them a role on the Service Account(resource).
+4. Scenario: VM instance with default Service Account in project A needs to access Cloud Storage bucket in project B.
+   Solution: In project B, add the service account from project A and assign Storage Object Viewer Permissions on the bucket.
